@@ -1,586 +1,285 @@
-<!-- Chosen Palette: Warm Professional (Stone/Slate/Teal with Warm Amber accents). Rationale: Aligns with a professional, data-driven executive presentation while maintaining a clean, modern aesthetic suitable for reading complex data without visual fatigue. -->
-
-<!-- Application Structure Plan:
-1. **Executive Dashboard (Hero):** Immediate view of the "Verdict" – Did we build equity? Highlights top-line KPIs (Lift, Efficiency, Users) to answer the primary C-Level question instantly.
-2. **Strategic Deep Dive (The "Why"):** A 3-column analysis of the Platform Roles. This moves beyond numbers to explaining the *psychological* function of each channel (Discovery vs. Authority vs. Social).
-3. **Quantitative Evidence (Brand Lift):** Interactive Chart.js section comparing Virulana's results against Industry Benchmarks. Toggles between "Absolute Lift" (Effectiveness) and "Cost per Lift" (Efficiency).
-4. **Creative Effectiveness Lab:** A filterable grid allowing the user to explore specific creative formats (ASMR, UGC, Functional) and see their specific contribution to the funnel.
-5. **Strategic Roadmap:** A prioritized action plan (Impact vs. Effort) for the next campaign wave.
-
-*User Flow:* The user starts with the high-level answer, validates it with the data/benchmarks, explores the creative drivers, and ends with actionable next steps.
--->
-
-<!-- Visualization & Content Choices:
-1. **Lift Comparison Chart (Bar Chart):** Goal: Compare. Shows Virulana (9.58%/12.3%) vs Benchmarks (6%). Interaction: Toggle Metric (Lift % vs Cost $). Justification: Bar charts are best for direct comparison of magnitudes.
-2. **Platform Role Cards (Grid):** Goal: Relationships/Organize. Uses layout to separate the distinct roles of TikTok, Meta, and Google.
-3. **Creative Matrix (Interactive HTML Cards):** Goal: Inform/Organize. JS filtering allows the user to drill down into "What worked" without cluttering the screen.
-4. **KPI Cards:** Goal: Inform. Large typography for immediate impact.
-
-*Confirmation:* NO SVG graphics used. NO Mermaid JS used. All visuals are CSS/HTML or Canvas-based.
--->
-
-<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virulana | Brand Lift Diagnosis & Strategy</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virulana Campaign Reports | Whizz Partners</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: #fafaf9; /* Stone-50 */
-        color: #1c1917; /* Stone-900 */
-    }
-
-    /* STRICT CHART CONTAINER STYLING */
-    .chart-container {
-        position: relative;
-        width: 100%;
-        max-width: 700px; /* Controlled width for readability */
-        margin-left: auto;
-        margin-right: auto;
-        height: 350px;
-        max-height: 400px;
-    }
-
-    .nav-btn.active {
-        background-color: #0f766e; /* Teal-700 */
-        color: white;
-        font-weight: 600;
-    }
-
-    .card-hover:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #f5f5f4;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #d6d3d1;
-        border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #a8a29e;
-    }
-
-    .status-badge {
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-weight: 700;
-    }
-</style>
-</head>
-<body class="flex flex-col min-h-screen">
-
-<!-- Navigation / Header -->
-<header class="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            <div class="flex items-center gap-3">
-                <div class="h-8 w-8 bg-teal-700 rounded text-white flex items-center justify-center font-bold text-lg">V</div>
-                <div>
-                    <h1 class="text-lg font-bold text-stone-800 leading-tight">Virulana Argentina</h1>
-                    <p class="text-xs text-stone-500">Brand Lift Diagnosis • Q3-Q4 2025</p>
-                </div>
-            </div>
-            <nav class="hidden md:flex space-x-2">
-                <button onclick="scrollToSection('dashboard')" class="nav-btn active px-3 py-2 rounded-md text-sm transition-colors text-stone-600 hover:text-teal-700">Resumen</button>
-                <button onclick="scrollToSection('lift-analysis')" class="nav-btn px-3 py-2 rounded-md text-sm transition-colors text-stone-600 hover:text-teal-700">Brand Lift</button>
-                <button onclick="scrollToSection('creative-lab')" class="nav-btn px-3 py-2 rounded-md text-sm transition-colors text-stone-600 hover:text-teal-700">Creatividad</button>
-                <button onclick="scrollToSection('roadmap')" class="nav-btn px-3 py-2 rounded-md text-sm transition-colors text-stone-600 hover:text-teal-700">Next Steps</button>
-            </nav>
-        </div>
-    </div>
-</header>
-
-<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12">
-
-    <!-- SECTION 1: EXECUTIVE DASHBOARD -->
-    <section id="dashboard" class="animate-fade-in">
-        <div class="bg-white rounded-xl p-6 border border-stone-200 shadow-sm mb-6">
-            <div class="mb-6 border-b border-stone-100 pb-4">
-                <span class="text-teal-700 font-bold text-xs uppercase tracking-wider mb-2 block">Veredicto Ejecutivo</span>
-                <h2 class="text-2xl md:text-3xl font-bold text-stone-800 mb-2">Construcción de Activos Reales</h2>
-                <p class="text-stone-600 max-w-3xl leading-relaxed">
-                    La campaña superó el riesgo de "ruido pasajero". Virulana logró penetrar el segmento joven (18-35) resignificando la categoría mediante códigos de <span class="bg-teal-100 text-teal-800 px-1 rounded font-semibold">resistencia + humor</span>. Los resultados de Lift son estadísticamente significativos (>99%), validando que no fue suerte, sino estrategia.
-                </p>
-            </div>
-
-            <!-- KPI GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- KPI 1 -->
-                <div class="bg-stone-50 p-4 rounded-lg border border-stone-100 card-hover transition-all">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-stone-500 text-sm font-medium">Max Brand Lift (Meta)</span>
-                        <span class="text-green-600 bg-green-50 px-2 py-0.5 rounded text-xs font-bold">▲ Exceeds Bench</span>
-                    </div>
-                    <div class="flex items-end gap-2">
-                        <span class="text-3xl font-bold text-stone-800">+12.3%</span>
-                        <span class="text-sm text-stone-500 mb-1">Ad Recall</span>
-                    </div>
-                    <p class="text-xs text-stone-400 mt-2">vs ~6% Benchmark Global CPG</p>
-                </div>
-
-                <!-- KPI 2 -->
-                <div class="bg-stone-50 p-4 rounded-lg border border-stone-100 card-hover transition-all">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-stone-500 text-sm font-medium">Abs. Lift (Google)</span>
-                        <span class="text-green-600 bg-green-50 px-2 py-0.5 rounded text-xs font-bold">▲ Strong</span>
-                    </div>
-                    <div class="flex items-end gap-2">
-                        <span class="text-3xl font-bold text-stone-800">+9.58%</span>
-                        <span class="text-sm text-stone-500 mb-1">Awareness</span>
-                    </div>
-                    <p class="text-xs text-stone-400 mt-2">Driven by 38.6% VTR (Retention)</p>
-                </div>
-
-                <!-- KPI 3 -->
-                <div class="bg-stone-50 p-4 rounded-lg border border-stone-100 card-hover transition-all">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-stone-500 text-sm font-medium">Usuarios Incrementales</span>
-                        <span class="text-teal-600 bg-teal-50 px-2 py-0.5 rounded text-xs font-bold">Total Est.</span>
-                    </div>
-                    <div class="flex items-end gap-2">
-                        <span class="text-3xl font-bold text-stone-800">~213k</span>
-                        <span class="text-sm text-stone-500 mb-1">Personas</span>
-                    </div>
-                    <p class="text-xs text-stone-400 mt-2">Ganados a la marca (Google + Meta)</p>
-                </div>
-
-                <!-- KPI 4 -->
-                <div class="bg-stone-50 p-4 rounded-lg border border-stone-100 card-hover transition-all">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-stone-500 text-sm font-medium">Eficiencia (CPLU)</span>
-                        <span class="text-amber-600 bg-amber-50 px-2 py-0.5 rounded text-xs font-bold">High Value</span>
-                    </div>
-                    <div class="flex items-end gap-2">
-                        <span class="text-3xl font-bold text-stone-800">< $9</span>
-                        <span class="text-sm text-stone-500 mb-1">ARS</span>
-                    </div>
-                    <p class="text-xs text-stone-400 mt-2">Costo por usuario levantado</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 2: PLATFORM ROLE AUDIT (QUALITATIVE) -->
-    <section>
-        <div class="mb-4">
-            <h3 class="text-xl font-bold text-stone-800">Auditoría Estratégica: El Rol de cada Canal</h3>
-            <p class="text-stone-600 text-sm max-w-4xl">
-                Más allá del lift numérico, analizamos el rol psicológico que jugó cada plataforma en el funnel de decisión. No fue "más de lo mismo", sino una orquestación complementaria.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Meta Card -->
-            <div class="bg-white rounded-lg border-t-4 border-blue-600 shadow-sm p-6 relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-stone-100 p-2 rounded-bl-lg">
-                    <span class="text-xl">👥</span>
-                </div>
-                <h4 class="font-bold text-lg text-stone-800 mb-1">Meta (IG/FB)</h4>
-                <span class="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded mb-4 inline-block">Rol: Validación Social & Frecuencia</span>
-
-                <ul class="space-y-3 mt-4 text-sm text-stone-600">
-                    <li class="flex items-start gap-2">
-                        <span class="text-green-500 font-bold">✓</span>
-                        <span><strong>Motor de Familiaridad:</strong> El uso de creadores (UGC) hizo que la marca se sintiera "nativa" y cercana, eliminando la barrera corporativa.</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-green-500 font-bold">✓</span>
-                        <span><strong>Driver Principal:</strong> Ad Recall (+12.3%). La repetición aquí no cansó, educó.</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- YouTube Card -->
-            <div class="bg-white rounded-lg border-t-4 border-red-600 shadow-sm p-6 relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-stone-100 p-2 rounded-bl-lg">
-                    <span class="text-xl">▶️</span>
-                </div>
-                <h4 class="font-bold text-lg text-stone-800 mb-1">YouTube</h4>
-                <span class="text-xs font-bold text-red-700 bg-red-50 px-2 py-1 rounded mb-4 inline-block">Rol: Autoridad Funcional</span>
-
-                <ul class="space-y-3 mt-4 text-sm text-stone-600">
-                    <li class="flex items-start gap-2">
-                        <span class="text-green-500 font-bold">✓</span>
-                        <span><strong>Demostración:</strong> El formato permitió probar el claim "No gotea". Aquí se construyó la credibilidad racional.</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-green-500 font-bold">✓</span>
-                        <span><strong>Retención:</strong> VTR de 38.6%. Quien vio el video, entendió la propuesta de valor.</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- TikTok Card -->
-            <div class="bg-white rounded-lg border-t-4 border-stone-800 shadow-sm p-6 relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-stone-100 p-2 rounded-bl-lg">
-                    <span class="text-xl">🎵</span>
-                </div>
-                <h4 class="font-bold text-lg text-stone-800 mb-1">TikTok</h4>
-                <span class="text-xs font-bold text-stone-700 bg-stone-100 px-2 py-1 rounded mb-4 inline-block">Rol: Frescura Cultural</span>
-
-                <ul class="space-y-3 mt-4 text-sm text-stone-600">
-                    <li class="flex items-start gap-2">
-                        <span class="text-green-500 font-bold">✓</span>
-                        <span><strong>Descubrimiento Masivo:</strong> 17.5M de impresiones. ASMR rompió el molde aburrido de la categoría "bolsas".</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <span class="text-amber-500 font-bold">⚠</span>
-                        <span><strong>Insight:</strong> Mucho alcance, pero necesitamos validar si esto se traduce en intención de compra en la próxima ola.</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 3: QUANTITATIVE LIFT (CHART) -->
-    <section id="lift-analysis" class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-stone-200">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Text / Controls -->
-            <div class="lg:col-span-1 flex flex-col justify-center">
-                <h3 class="text-xl font-bold text-stone-800 mb-3">Evidencia Cuantitativa: Brand Lift</h3>
-                <p class="text-sm text-stone-600 mb-6">
-                    Comparamos el impacto neto (Lift Absoluto) contra los benchmarks de la industria CPG. Virulana superó consistentemente el promedio, demostrando alta eficiencia de inversión.
-                </p>
-
-                <div class="bg-stone-50 p-4 rounded-lg mb-6 border border-stone-100">
-                    <h5 class="text-xs font-bold text-stone-500 uppercase mb-2">Sanity Check Metodológico</h5>
-                    <ul class="text-xs text-stone-600 space-y-1">
-                        <li>• <strong>Confianza:</strong> >99% (Resultados no aleatorios)</li>
-                        <li>• <strong>Control:</strong> Ghost Bidding / Split test methodology</li>
-                        <li>• <strong>Muestra:</strong> +34k encuestas contestadas</li>
-                    </ul>
-                </div>
-
-                <!-- Toggle Buttons -->
-                <div class="flex bg-stone-100 p-1 rounded-lg">
-                    <button onclick="updateChart('lift')" id="btn-lift" class="flex-1 py-2 text-sm font-medium rounded-md shadow bg-white text-teal-800 transition-all">
-                        % Lift Absoluto
-                    </button>
-                    <button onclick="updateChart('cost')" id="btn-cost" class="flex-1 py-2 text-sm font-medium rounded-md text-stone-500 hover:text-stone-700 transition-all">
-                        $ Eficiencia (ARS)
-                    </button>
-                </div>
-            </div>
-
-            <!-- Chart Area -->
-            <div class="lg:col-span-2">
-                <div class="chart-container">
-                    <canvas id="liftChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 4: CREATIVE EFFECTIVENESS LAB -->
-    <section id="creative-lab">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-6">
-            <div>
-                <h3 class="text-xl font-bold text-stone-800">Matriz de Efectividad Creativa</h3>
-                <p class="text-sm text-stone-600 mt-1">Explora qué formatos generaron los resultados. Clic en las tarjetas para ver el insight estratégico.</p>
-            </div>
-            <!-- Filters -->
-            <div class="flex space-x-2 mt-4 md:mt-0">
-                <button onclick="filterCreative('all')" class="px-3 py-1 text-xs font-semibold rounded-full border border-stone-300 hover:bg-stone-100 text-stone-600 transition active-filter bg-stone-800 text-white" id="filter-all">Todos</button>
-                <button onclick="filterCreative('ugc')" class="px-3 py-1 text-xs font-semibold rounded-full border border-stone-300 hover:bg-stone-100 text-stone-600 transition" id="filter-ugc">UGC (Social)</button>
-                <button onclick="filterCreative('functional')" class="px-3 py-1 text-xs font-semibold rounded-full border border-stone-300 hover:bg-stone-100 text-stone-600 transition" id="filter-functional">Funcional (Demo)</button>
-                <button onclick="filterCreative('asmr')" class="px-3 py-1 text-xs font-semibold rounded-full border border-stone-300 hover:bg-stone-100 text-stone-600 transition" id="filter-asmr">ASMR (Viral)</button>
-            </div>
-        </div>
-
-        <div id="creative-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Cards injected via JS -->
-        </div>
-    </section>
-
-    <!-- SECTION 5: STRATEGIC ROADMAP -->
-    <section id="roadmap" class="bg-stone-900 text-stone-50 rounded-xl p-8 mb-12">
-        <h3 class="text-xl font-bold mb-6 flex items-center">
-            <span class="bg-teal-500 w-2 h-6 mr-3 rounded-full"></span>
-            Learning Agenda: Próximos Pasos (Q1 2026)
-        </h3>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="text-stone-400 text-xs uppercase tracking-wider border-b border-stone-700">
-                        <th class="pb-3 pl-2">Acción Estratégica</th>
-                        <th class="pb-3">Justificación (Data-Backed)</th>
-                        <th class="pb-3">Prioridad</th>
-                        <th class="pb-3 text-right pr-2">Owner</th>
-                    </tr>
-                </thead>
-                <tbody class="text-sm divide-y divide-stone-800">
-                    <tr class="group hover:bg-stone-800 transition">
-                        <td class="py-4 pl-2 font-semibold text-white">Escalar Formato UGC</td>
-                        <td class="py-4 text-stone-400">El formato "problema/solución" tuvo el mayor CTR. Rotar protagonistas para evitar fatiga visual.</td>
-                        <td class="py-4"><span class="status-badge bg-red-500 text-white">Alta</span></td>
-                        <td class="py-4 text-right pr-2 text-stone-500">Creative Lead</td>
-                    </tr>
-                    <tr class="group hover:bg-stone-800 transition">
-                        <td class="py-4 pl-2 font-semibold text-white">Refinar Hook de YouTube</td>
-                        <td class="py-4 text-stone-400">Viewability es perfecto (99%), pero necesitamos subir la retención en seg 0-3 en Bumpers.</td>
-                        <td class="py-4"><span class="status-badge bg-amber-500 text-stone-900">Media</span></td>
-                        <td class="py-4 text-right pr-2 text-stone-500">Media Agency</td>
-                    </tr>
-                    <tr class="group hover:bg-stone-800 transition">
-                        <td class="py-4 pl-2 font-semibold text-white">Validar Intención TikTok</td>
-                        <td class="py-4 text-stone-400">El alcance es masivo (ASMR). Ahora debemos medir si genera búsqueda de producto o tráfico web.</td>
-                        <td class="py-4"><span class="status-badge bg-teal-600 text-white">Estratégica</span></td>
-                        <td class="py-4 text-right pr-2 text-stone-500">Data & Insights</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-</main>
-
-<!-- Footer -->
-<footer class="bg-white border-t border-stone-200 py-8 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-        <p class="text-xs text-stone-400 mb-2">Generado automáticamente para análisis ejecutivo Virulana.</p>
-        <p class="text-xs text-stone-300">Confidential • Internal Use Only • 2026</p>
-    </div>
-</footer>
-
-<!-- JAVASCRIPT LOGIC -->
-<script>
-    // --- DATA STORE ---
-    const appData = {
-        chart: {
-            labels: ['Meta (Ad Recall)', 'Google (Brand Lift)', 'Industry Benchmark'],
-            liftValues: [12.3, 9.58, 6.0], // Percentages
-            costValues: [6.50, 8.80, 12.50] // Estimated ARS Cost based on "<$9" and benchmarks
-        },
-        creatives: [
-            {
-                id: 1,
-                category: 'ugc',
-                title: 'UGC "Odia Limpiar"',
-                platform: 'Meta',
-                metric: 'Ad Recall Driver',
-                value: 'High',
-                insight: 'La identificación emocional ("odio limpiar") conectó mejor que la limpieza técnica. Se sintió nativo, no un anuncio.',
-                subtext: 'CTR: 2.19% (Top Performer)'
-            },
-            {
-                id: 2,
-                category: 'functional',
-                title: 'Demo "No Gotea"',
-                platform: 'YouTube',
-                metric: 'VTR (Retention)',
-                value: '38.6%',
-                insight: 'El beneficio racional funcionó. Quien vió la demo entendió la superioridad del producto. Construye equity a largo plazo.',
-                subtext: 'Viewability: 99.7%'
-            },
-            {
-                id: 3,
-                category: 'asmr',
-                title: 'ASMR Sensorial',
-                platform: 'TikTok',
-                metric: 'Impresiones',
-                metricLabel: 'Volume',
-                value: '17.5M',
-                insight: 'Generó familiaridad subconsciente. Rompió el código aburrido de la categoría, pero su impacto en ventas es indirecto.',
-                subtext: 'CPM: $668 ARS (Eficiente)'
-            },
-            {
-                id: 4,
-                category: 'functional',
-                title: 'Bumper 6s',
-                platform: 'YouTube',
-                metric: 'Frecuencia',
-                value: 'High',
-                insight: 'Excelente para recordación, pero 6 segundos es poco para persuadir en un producto nuevo. Usar solo como refuerzo.',
-                subtext: 'Lift Contribution: Moderate'
-            },
-            {
-                id: 5,
-                category: 'ugc',
-                title: 'Creator: Mili Felizzia',
-                platform: 'Meta/TikTok',
-                metric: 'Engagement',
-                value: 'Viral',
-                insight: 'La estructura narrativa (Problema -> Solución Rápida -> Cara) es la ganadora. Replicar este guión con otros perfiles.',
-                subtext: 'Cost per Result: Lowest'
-            }
-        ]
-    };
-
-    // --- CHART INITIALIZATION ---
-    let liftChart;
-
-    function initChart() {
-        const ctx = document.getElementById('liftChart').getContext('2d');
-
-        // Default configuration (Lift %)
-        const config = {
-            type: 'bar',
-            data: {
-                labels: appData.chart.labels,
-                datasets: [{
-                    label: 'Lift Absoluto (%)',
-                    data: appData.chart.liftValues,
-                    backgroundColor: ['#0d9488', '#14b8a6', '#d6d3d1'], // Teals for brand, Grey for bench
-                    borderRadius: 6,
-                    barThickness: 50,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1c1917',
-                        padding: 12,
-                        callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + '%';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#f5f5f4' },
-                        title: { display: true, text: 'Percentage Impact (%)' }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
-                }
-            }
-        };
-
-        liftChart = new Chart(ctx, config);
-    }
-
-    // --- INTERACTIVITY ---
-
-    // 1. Chart Toggle Logic
-    function updateChart(mode) {
-        const btnLift = document.getElementById('btn-lift');
-        const btnCost = document.getElementById('btn-cost');
-
-        if (mode === 'lift') {
-            // Style Buttons
-            btnLift.classList.add('bg-white', 'text-teal-800', 'shadow');
-            btnLift.classList.remove('text-stone-500', 'hover:text-stone-700');
-            btnCost.classList.remove('bg-white', 'text-teal-800', 'shadow');
-            btnCost.classList.add('text-stone-500', 'hover:text-stone-700');
-
-            // Update Data
-            liftChart.data.datasets[0].data = appData.chart.liftValues;
-            liftChart.data.datasets[0].label = 'Lift Absoluto (%)';
-            liftChart.data.datasets[0].backgroundColor = ['#0d9488', '#14b8a6', '#d6d3d1'];
-            liftChart.options.scales.y.title.text = 'Percentage Impact (%)';
-            liftChart.options.plugins.tooltip.callbacks.label = (ctx) => `+${ctx.raw}%`;
-        } else {
-            // Style Buttons
-            btnCost.classList.add('bg-white', 'text-amber-700', 'shadow');
-            btnCost.classList.remove('text-stone-500', 'hover:text-stone-700');
-            btnLift.classList.remove('bg-white', 'text-teal-800', 'shadow');
-            btnLift.classList.add('text-stone-500', 'hover:text-stone-700');
-
-            // Update Data
-            liftChart.data.datasets[0].data = appData.chart.costValues;
-            liftChart.data.datasets[0].label = 'Costo por Lifted User ($ARS)';
-            liftChart.data.datasets[0].backgroundColor = ['#78716c', '#a8a29e', '#ef4444']; // Grey brand, Red bench (higher cost)
-            liftChart.options.scales.y.title.text = 'Cost (ARS)';
-            liftChart.options.plugins.tooltip.callbacks.label = (ctx) => `$${ctx.raw} ARS`;
+        body {
+            font-family: 'Inter', sans-serif;
         }
-        liftChart.update();
-    }
 
-    // 2. Creative Grid Rendering & Filtering
-    function renderCreativeGrid(category) {
-        const grid = document.getElementById('creative-grid');
-        grid.innerHTML = ''; // Clear existing
+        .gradient-bg {
+            background: linear-gradient(135deg, #A855F7 0%, #06B6D4 100%);
+        }
 
-        const filtered = category === 'all'
-            ? appData.creatives
-            : appData.creatives.filter(c => c.category === category);
+        .gradient-text {
+            background: linear-gradient(135deg, #A855F7 0%, #06B6D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-        filtered.forEach(item => {
-            const card = document.createElement('div');
-            card.className = "bg-white border border-stone-200 rounded-lg p-5 card-hover cursor-pointer group";
+        .card-hover {
+            transition: all 0.3s ease;
+        }
 
-            // Icon selection
-            let icon = '📺';
-            if(item.platform.includes('Meta')) icon = '📱';
-            if(item.platform.includes('TikTok')) icon = '🎵';
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
 
-            card.innerHTML = `
-                <div class="flex justify-between items-start mb-3">
-                    <span class="text-2xl">${icon}</span>
-                    <span class="text-[10px] font-bold tracking-wider text-stone-400 uppercase border border-stone-100 bg-stone-50 px-2 py-0.5 rounded">${item.platform}</span>
+        .card-hover:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <img src="assets/Whizz-Logo.png" alt="Whizz Partners" class="h-10 w-auto">
+                    <div class="hidden sm:block">
+                        <h1 class="text-xl font-bold text-gray-900">Whizz Partners</h1>
+                        <p class="text-xs text-gray-500">Data-Driven Marketing Intelligence</p>
+                    </div>
                 </div>
-                <h4 class="font-bold text-stone-800 text-lg mb-1">${item.title}</h4>
-                <div class="mb-3">
-                    <span class="text-xs text-stone-500 uppercase font-semibold block">${item.metric}</span>
-                    <span class="text-2xl font-bold text-teal-700">${item.value}</span>
+                <a href="https://whizz.partners" target="_blank" class="text-sm font-medium gradient-text hover:opacity-80 transition">
+                    Visit whizz.partners →
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative py-20 overflow-hidden">
+        <div class="absolute inset-0 gradient-bg opacity-5"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-block mb-4 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-semibold">
+                Campaign Performance Report
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 mb-6">
+                Virulana Argentina
+                <span class="block gradient-text mt-2">Brand Lift Analysis</span>
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-4">
+                Comprehensive analysis of Q3-Q4 2025 campaign performance across Meta, YouTube, and TikTok platforms
+            </p>
+            <p class="text-sm text-gray-500 mb-12">
+                <span class="font-semibold">+213k</span> incremental users •
+                <span class="font-semibold">+12.3%</span> brand lift •
+                <span class="font-semibold">< $9 ARS</span> CPLU
+            </p>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
+                <div class="bg-white rounded-lg p-6 shadow-md">
+                    <div class="text-3xl font-bold gradient-text">17.5M</div>
+                    <div class="text-sm text-gray-600 mt-1">Total Impressions</div>
                 </div>
-                <div class="border-t border-stone-100 pt-3">
-                    <p class="text-xs text-stone-400 font-mono mb-2">${item.subtext}</p>
-                    <p class="text-sm text-stone-600 leading-snug group-hover:text-stone-900 transition-colors">
-                        <strong>Insight:</strong> ${item.insight}
+                <div class="bg-white rounded-lg p-6 shadow-md">
+                    <div class="text-3xl font-bold gradient-text">38.6%</div>
+                    <div class="text-sm text-gray-600 mt-1">Video Retention</div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-md">
+                    <div class="text-3xl font-bold gradient-text">>99%</div>
+                    <div class="text-sm text-gray-600 mt-1">Statistical Confidence</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content - Report Selection -->
+    <section class="py-16 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Select Your Report View</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Choose between our comprehensive dashboard or visual infographic to explore the campaign results
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                <!-- Dashboard Card -->
+                <a href="dashboard.html" class="block">
+                    <div class="bg-white rounded-2xl p-8 shadow-lg border-2 border-gray-100 card-hover h-full">
+                        <div class="flex items-start justify-between mb-6">
+                            <div class="w-16 h-16 rounded-xl gradient-bg flex items-center justify-center text-white text-2xl font-bold">
+                                📊
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                                Interactive
+                            </span>
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">
+                            Executive Dashboard
+                        </h3>
+
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Deep dive into quantitative metrics with interactive charts, platform-specific analysis,
+                            and creative effectiveness matrix. Perfect for detailed data exploration.
+                        </p>
+
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span class="mr-2 text-green-500">✓</span>
+                                Brand Lift Comparison Charts
+                            </div>
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span class="mr-2 text-green-500">✓</span>
+                                Platform Role Analysis
+                            </div>
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span class="mr-2 text-green-500">✓</span>
+                                Creative Performance Lab
+                            </div>
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span class="mr-2 text-green-500">✓</span>
+                                Strategic Roadmap Q1 2026
+                            </div>
+                        </div>
+
+                        <div class="flex items-center text-purple-600 font-semibold">
+                            <span>Open Dashboard</span>
+                            <span class="ml-2 arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Infographic Card -->
+                <a href="infografia.html" class="block">
+                    <div class="bg-white rounded-2xl p-8 shadow-lg border-2 border-gray-100 card-hover h-full">
+                        <div class="flex items-start justify-between mb-6">
+                            <div class="w-16 h-16 rounded-xl gradient-bg flex items-center justify-center text-white text-2xl font-bold">
+                                📈
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-cyan-100 text-cyan-700 text-xs font-semibold">
+                                Visual Story
+                            </span>
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">
+                            Visual Infographic
+                        </h3>
+
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            High-impact visual narrative focused on key insights and campaign story.
+                            Modern design with electric growth palette, perfect for presentations.
+                        </p>
+
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span class="mr-2 text-green-500">✓</span>
+                                Executive Summary Hero
+                            </div>
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span class="mr-2 text-green-500">✓</span>
+                                Platform Ecosystem View
+                            </div>
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span class="mr-2 text-green-500">✓</span>
+                                Psychology of Creative Success
+                            </div>
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span class="mr-2 text-green-500">✓</span>
+                                Future Strategy Outlook
+                            </div>
+                        </div>
+
+                        <div class="flex items-center text-cyan-600 font-semibold">
+                            <span>Open Infographic</span>
+                            <span class="ml-2 arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- Quick Insights -->
+            <div class="mt-16 bg-gradient-to-r from-purple-50 to-cyan-50 rounded-2xl p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Key Campaign Highlights</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🎯</div>
+                        <div class="font-bold text-gray-900">Target Achieved</div>
+                        <div class="text-sm text-gray-600 mt-1">Successfully penetrated 18-35 segment</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">📱</div>
+                        <div class="font-bold text-gray-900">Multi-Platform</div>
+                        <div class="text-sm text-gray-600 mt-1">Meta, YouTube, TikTok synergy</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">💡</div>
+                        <div class="font-bold text-gray-900">UGC Success</div>
+                        <div class="text-sm text-gray-600 mt-1">Creator content drove 12.3% recall</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">✅</div>
+                        <div class="font-bold text-gray-900">Validated</div>
+                        <div class="text-sm text-gray-600 mt-1">Ghost bidding methodology</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <img src="assets/Whizz-Logo.png" alt="Whizz Partners" class="h-8 w-auto mb-4">
+                    <p class="text-sm text-gray-600">
+                        Data-driven marketing intelligence and strategic insights for modern brands.
                     </p>
                 </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    function filterCreative(category) {
-        // Update button styles
-        const buttons = document.querySelectorAll('#creative-lab button');
-        buttons.forEach(btn => {
-            btn.classList.remove('bg-stone-800', 'text-white');
-            btn.classList.add('text-stone-600');
-        });
-        document.getElementById(`filter-${category}`).classList.add('bg-stone-800', 'text-white');
-        document.getElementById(`filter-${category}`).classList.remove('text-stone-600');
-
-        renderCreativeGrid(category);
-    }
-
-    // 3. Smooth Scroll Navigation
-    function scrollToSection(id) {
-        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-
-        // Update active state in nav
-        const navBtns = document.querySelectorAll('.nav-btn');
-        navBtns.forEach(btn => btn.classList.remove('active', 'bg-teal-700', 'text-white'));
-        // Note: Simple implementation, doesn't auto-update on scroll, but functional for clicking
-    }
-
-    // --- EXECUTE ON LOAD ---
-    window.addEventListener('DOMContentLoaded', () => {
-        initChart();
-        renderCreativeGrid('all');
-    });
-
-</script>
+                <div>
+                    <h4 class="font-semibold text-gray-900 mb-3">Campaign Info</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>Client: Virulana Argentina</li>
+                        <li>Period: Q3-Q4 2025</li>
+                        <li>Platforms: Meta, YouTube, TikTok</li>
+                        <li>Target: Gen Z (18-35)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="dashboard.html" class="text-purple-600 hover:text-purple-700">Executive Dashboard</a></li>
+                        <li><a href="infografia.html" class="text-cyan-600 hover:text-cyan-700">Visual Infographic</a></li>
+                        <li><a href="https://whizz.partners" target="_blank" class="gradient-text hover:opacity-80">whizz.partners</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 pt-8 text-center">
+                <p class="text-sm text-gray-500">
+                    © 2026 Whizz Partners. All rights reserved. | Confidential • Internal Use Only
+                </p>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>

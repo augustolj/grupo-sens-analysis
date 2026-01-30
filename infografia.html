@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virulana: Brand Lift & Campaign Impact Report | Whizz Partners</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+        color: #1e293b;
+    }
+
+    .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 350px;
+        max-height: 400px;
+    }
+    
+    @media (max-width: 640px) {
+        .chart-container {
+            height: 280px;
+        }
+    }
+
+    .card-shadow {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .gradient-text {
+        background: linear-gradient(to right, #0f766e, #2dd4bf);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .whizz-gradient {
+        background: linear-gradient(135deg, #A855F7 0%, #06B6D4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- Navigation / Header with Whizz Branding -->
+<nav class="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition">
+                    <img src="assets/Whizz-Logo.png" alt="Whizz Partners" class="h-8 w-auto">
+                    <span class="font-bold text-slate-800 text-sm hidden sm:inline">Whizz Partners</span>
+                </a>
+                <div class="h-6 w-px bg-slate-300"></div>
+                <div class="flex items-center">
+                    <span class="text-xl font-black text-teal-600 tracking-tighter">V.</span>
+                    <span class="ml-2 font-bold text-slate-800 tracking-tight text-sm">DATA INSIGHTS</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="px-3 py-1 rounded-full bg-slate-100 text-xs font-semibold text-slate-600 hidden sm:inline">Q3-Q4 Report</span>
+                <a href="index.html" class="text-sm font-medium whizz-gradient hover:opacity-80 transition">← Menu</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section: Executive Summary -->
+<div class="bg-slate-900 text-white pt-16 pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-teal-400 font-bold tracking-wide uppercase text-sm mb-3">Informe de Impacto de Marca</h2>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">Rejuveneciendo una Categoría Clásica</h1>
+            <p class="text-lg text-slate-300 leading-relaxed">
+                La campaña de lanzamiento de <strong>Bolsas Virulana</strong> logró lo imposible: penetrar en el segmento <strong>Gen Z & Millennial (18-35)</strong>. 
+                A través de una estrategia cross-platform, transformamos un commodity "invisible" en una elección de marca consciente, superando todos los benchmarks regionales.
+            </p>
+        </div>
+
+        <!-- Key Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                <p class="text-slate-400 text-sm font-medium uppercase">Meta Brand Recall</p>
+                <div class="mt-2 flex items-baseline">
+                    <span class="text-4xl font-bold text-teal-400">+12.3%</span>
+                    <span class="ml-2 text-sm text-green-400 font-semibold">▲ High Confidence</span>
+                </div>
+                <p class="mt-2 text-xs text-slate-500">Impulsado por UGC & Frecuencia</p>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                <p class="text-slate-400 text-sm font-medium uppercase">Google Absolute Lift</p>
+                <div class="mt-2 flex items-baseline">
+                    <span class="text-4xl font-bold text-teal-400">+9.58%</span>
+                    <span class="ml-2 text-sm text-slate-400">vs 6% Benchmark</span>
+                </div>
+                <p class="mt-2 text-xs text-slate-500">Impulsado por Demo Funcional</p>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                <p class="text-slate-400 text-sm font-medium uppercase">Incremental Users</p>
+                <div class="mt-2 flex items-baseline">
+                    <span class="text-4xl font-bold text-teal-400">~213k</span>
+                    <span class="ml-2 text-sm text-slate-400">Total Est.</span>
+                </div>
+                <p class="mt-2 text-xs text-slate-500">Personas ganadas a la marca</p>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                <p class="text-slate-400 text-sm font-medium uppercase">Cost Per Lifted User</p>
+                <div class="mt-2 flex items-baseline">
+                    <span class="text-4xl font-bold text-rose-400"><$9</span>
+                    <span class="ml-2 text-sm text-slate-400">ARS</span>
+                </div>
+                <p class="mt-2 text-xs text-slate-500">Alta eficiencia de inversión</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section: Quantitative Deep Dive -->
+<div class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">El Salto Cuantitativo</h3>
+                <p class="text-slate-600 mb-6 leading-relaxed">
+                    En una industria saturada donde el promedio de <em>Brand Lift</em> ronda el 6%, Virulana rompió el techo. La combinación de <strong>frecuencia social en Meta</strong> y <strong>autoridad funcional en YouTube</strong> generó un efecto multiplicador.
+                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold text-sm">✓</span>
+                        <span class="ml-3 text-slate-700 text-sm"><strong>Meta (Instagram/Facebook):</strong> La estrategia de validación social mediante creadores disparó el Ad Recall.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold text-sm">✓</span>
+                        <span class="ml-3 text-slate-700 text-sm"><strong>Google (YouTube):</strong> El VTR (View Through Rate) alcanzó un impresionante <strong>38.6%</strong>, indicando que casi 4 de cada 10 usuarios vieron el anuncio completo voluntariamente.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 card-shadow">
+                <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wide mb-4 text-center">Brand Lift: Virulana vs. Benchmark CPG</h4>
+                <div class="chart-container">
+                    <canvas id="liftComparisonChart"></canvas>
+                </div>
+                <p class="text-center text-xs text-slate-400 mt-4">Fuente: Brand Lift Studies (Google & Meta) Q3-Q4 2025</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section: The Platform Strategy (Funnel) -->
+<div class="py-16 bg-slate-50 border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h3 class="text-2xl font-bold text-slate-900">Sinergia de Plataformas</h3>
+            <p class="mt-2 text-slate-600 max-w-2xl mx-auto">
+                No usamos los canales para decir lo mismo. Asignamos un <strong>rol psicológico</strong> único a cada plataforma para mover al usuario a través del funnel.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card: TikTok -->
+            <div class="bg-white rounded-xl overflow-hidden card-shadow hover:shadow-lg transition-shadow duration-300">
+                <div class="bg-slate-900 p-4 border-b border-slate-800">
+                    <div class="flex justify-between items-center">
+                        <span class="text-white font-bold">TikTok Ads</span>
+                        <span class="text-xs bg-slate-700 text-teal-300 px-2 py-1 rounded">Discovery</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h4 class="text-lg font-bold text-slate-800 mb-2">Frescura Cultural</h4>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Romper la barrera del "producto aburrido" mediante formatos nativos como ASMR.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-sm border-b border-slate-100 pb-2">
+                            <span class="text-slate-500">Impresiones</span>
+                            <span class="font-bold text-slate-800">17.5 Millones</span>
+                        </div>
+                        <div class="flex justify-between text-sm border-b border-slate-100 pb-2">
+                            <span class="text-slate-500">CPM Promedio</span>
+                            <span class="font-bold text-teal-600">$668 ARS</span>
+                        </div>
+                        <div class="mt-4 pt-2">
+                            <span class="text-xs font-semibold text-rose-500 uppercase">Insight</span>
+                            <p class="text-xs text-slate-500 mt-1">El ASMR generó familiaridad subconsciente a bajo costo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Meta -->
+            <div class="bg-white rounded-xl overflow-hidden card-shadow hover:shadow-lg transition-shadow duration-300">
+                <div class="bg-blue-900 p-4 border-b border-blue-800">
+                    <div class="flex justify-between items-center">
+                        <span class="text-white font-bold">Meta (IG/FB)</span>
+                        <span class="text-xs bg-blue-800 text-blue-200 px-2 py-1 rounded">Social Proof</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h4 class="text-lg font-bold text-slate-800 mb-2">Validación Social</h4>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Humanizar la marca a través de creadores (UGC) que comparten el dolor de limpiar.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-sm border-b border-slate-100 pb-2">
+                            <span class="text-slate-500">Brand Lift (Recall)</span>
+                            <span class="font-bold text-blue-600">+12.3%</span>
+                        </div>
+                        <div class="flex justify-between text-sm border-b border-slate-100 pb-2">
+                            <span class="text-slate-500">Inc. Users</span>
+                            <span class="font-bold text-slate-800">~185,000</span>
+                        </div>
+                        <div class="mt-4 pt-2">
+                            <span class="text-xs font-semibold text-blue-500 uppercase">Insight</span>
+                            <p class="text-xs text-slate-500 mt-1">La frecuencia alta no saturó; educó y fijó la marca.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Google/YouTube -->
+            <div class="bg-white rounded-xl overflow-hidden card-shadow hover:shadow-lg transition-shadow duration-300">
+                <div class="bg-red-900 p-4 border-b border-red-800">
+                    <div class="flex justify-between items-center">
+                        <span class="text-white font-bold">Google (YouTube)</span>
+                        <span class="text-xs bg-red-800 text-red-200 px-2 py-1 rounded">Authority</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h4 class="text-lg font-bold text-slate-800 mb-2">Evidencia Funcional</h4>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Demostrar la superioridad técnica ("No Gotea") cuando el usuario está atento.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-sm border-b border-slate-100 pb-2">
+                            <span class="text-slate-500">Absolute Lift</span>
+                            <span class="font-bold text-red-600">+9.58%</span>
+                        </div>
+                        <div class="flex justify-between text-sm border-b border-slate-100 pb-2">
+                            <span class="text-slate-500">VTR (Retención)</span>
+                            <span class="font-bold text-slate-800">38.6%</span>
+                        </div>
+                        <div class="mt-4 pt-2">
+                            <span class="text-xs font-semibold text-red-500 uppercase">Insight</span>
+                            <p class="text-xs text-slate-500 mt-1">Formatos de demostración construyeron credibilidad racional.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section: Creative Lab -->
+<div class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-2xl font-bold text-slate-900 mb-8">Creative Effectiveness: ¿Qué funcionó y por qué?</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="flex items-start p-4 bg-teal-50 rounded-lg border border-teal-100">
+                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-200 flex items-center justify-center text-xl">😡</div>
+                <div class="ml-4">
+                    <h4 class="font-bold text-slate-800">El Insight "Odio Limpiar"</h4>
+                    <p class="text-sm text-slate-600 mt-1">
+                        A diferencia de la competencia que muestra "felicidad al limpiar", Virulana empatizó con la frustración. 
+                        <strong>Resultado:</strong> Mayor conexión emocional y CTR en piezas que validan que limpiar es una tarea molesta que queremos terminar rápido.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start p-4 bg-teal-50 rounded-lg border border-teal-100">
+                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-teal-200 flex items-center justify-center text-xl">💧</div>
+                <div class="ml-4">
+                    <h4 class="font-bold text-slate-800">El Hook "No Gotea"</h4>
+                    <p class="text-sm text-slate-600 mt-1">
+                        El claim funcional simple resolvió un "pain point" específico y visual.
+                        <strong>Resultado:</strong> El VTR de casi 40% demuestra que una vez planteado el problema (la basura chorrea), el usuario se queda a ver la solución.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-white rounded-xl border border-slate-200 p-6 card-shadow">
+            <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wide mb-4">Video Engagement Metrics (YouTube)</h4>
+            <div class="chart-container">
+                <canvas id="videoMetricsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section: Conclusion & Next Steps -->
+<div class="bg-slate-900 text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h3 class="text-2xl font-bold mb-4">Diagnóstico Final</h3>
+        <p class="text-lg text-slate-300 mb-8">
+            Virulana ha obtenido "permiso" para hablarle al segmento joven. La marca ya no es invisible; es una opción inteligente.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+            <div class="bg-slate-800 p-5 rounded-lg border-l-4 border-teal-500">
+                <h5 class="font-bold text-white mb-2">1. Escalar UGC</h5>
+                <p class="text-sm text-slate-400">Las piezas con creadores tuvieron el mejor costo-beneficio. Aumentar inversión en Meta un 20%.</p>
+            </div>
+            <div class="bg-slate-800 p-5 rounded-lg border-l-4 border-teal-500">
+                <h5 class="font-bold text-white mb-2">2. Rotación Creativa</h5>
+                <p class="text-sm text-slate-400">Aunque no hubo fatiga, rotar fondos y CTAs para mantener la frescura en los próximos 3 meses.</p>
+            </div>
+            <div class="bg-slate-800 p-5 rounded-lg border-l-4 border-teal-500">
+                <h5 class="font-bold text-white mb-2">3. Segmentación</h5>
+                <p class="text-sm text-slate-400">Profundizar la segmentación psicográfica basada en intereses (Gaming, Lifestyle) en TikTok.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-white border-t border-slate-200 py-8 text-center">
+    <p class="text-xs text-slate-500">© 2026 Whizz Partners | Virulana Argentina Campaign Report | Confidential • Internal Use Only</p>
+</footer>
+
+<script>
+    const colors = {
+        primary: '#0f766e',
+        secondary: '#2dd4bf',
+        accent: '#fb7185',
+        dark: '#0f172a',
+        grey: '#94a3b8'
+    };
+
+    const liftCtx = document.getElementById('liftComparisonChart').getContext('2d');
+    new Chart(liftCtx, {
+        type: 'bar',
+        data: {
+            labels: [['Meta', 'Ad Recall'], ['Google', 'Brand Lift'], ['Industry', 'Benchmark']],
+            datasets: [{
+                label: 'Lift %',
+                data: [12.3, 9.58, 6.0],
+                backgroundColor: [colors.primary, colors.secondary, colors.grey],
+                borderRadius: 6,
+                barThickness: 50,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: colors.dark,
+                    padding: 12,
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 14 },
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        },
+                        label: function(context) {
+                            return context.parsed.y + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' },
+                    ticks: {
+                        callback: function(value) { return value + "%" }
+                    }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    const videoLabels = ['View Through Rate', 'Viewability Rate', 'Completion Rate'];
+    
+    const videoCtx = document.getElementById('videoMetricsChart').getContext('2d');
+    new Chart(videoCtx, {
+        type: 'bar',
+        data: {
+            labels: videoLabels,
+            datasets: [{
+                label: 'Performance %',
+                data: [38.6, 94.3, 39.0],
+                backgroundColor: [colors.secondary, colors.primary, colors.accent],
+                borderRadius: 6,
+                barThickness: 40,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: colors.dark,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        },
+                        label: function(context) {
+                            return context.parsed.x + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: { color: '#f1f5f9' }
+                },
+                y: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
