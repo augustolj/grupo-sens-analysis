@@ -1,0 +1,22 @@
+# Bloquear todos los buscadores y crawlers
+User-agent: *
+Disallow: /
+
+# Bloquear bots específicos adicionales
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+User-agent: Slurp
+Disallow: /
+
+User-agent: DuckDuckBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
